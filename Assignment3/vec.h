@@ -66,7 +66,7 @@ struct vec2 {
     vec2 operator / ( const GLfloat s ) const {
 #ifdef DEBUG
 	if ( std::fabs(s) < DivideByZeroTolerance ) {
-	    std::cerr << "[" << __FILE__ << ":" << __LINE__ << "] "
+	   std::cerr << "[" << __FILE__ << ":" << __LINE__ << "] "
 		      << "Division by zero" << std::endl;
 	    return vec2();
 	}
