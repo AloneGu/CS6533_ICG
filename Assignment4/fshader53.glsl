@@ -16,7 +16,6 @@ in  float float_texture;
 
 out vec4 fColor;
 uniform sampler2D texture_2D;
-uniform sampler2D my_texture_2D;
 uniform sampler1D texture_1D;
 uniform int text_ground_flag;
 uniform int f_sphere_flag;
@@ -46,7 +45,7 @@ if(fract(4*s)<0.35 && fract(4*s)>0 && fract(4*t)>0 && fract(4*t)<0.35) discard;
 
 if(f_sphere_check_flag==1  && text_ground_flag==0)
 {
-vec4 tmp_color=texture(my_texture_2D,texCoord);
+vec4 tmp_color=texture(texture_2D,texCoord);
 if(tmp_color[0]==0)
 {tmp_color=vec4(0.9,0.1,0.1,1.0);}
 tex_color=color*tmp_color;

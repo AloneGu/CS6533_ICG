@@ -37,26 +37,20 @@ GLuint s_smooth_buffer;
 GLuint f_tex_buffer;
 GLuint firework_buffer;
 static GLuint texName;
-static GLuint my_texName;
 static GLuint line_texName;
-#define ImageWidth  80
-#define ImageHeight 96
+#define ImageWidth  64
+#define ImageHeight 64
 GLubyte Image[ImageHeight][ImageWidth][4];
-GLubyte my_Image[64][64][4];
-
 #define	stripeImageWidth 32
 GLubyte stripeImage[4*stripeImageWidth];
 // Projection transformation parameters
 GLfloat  fovy = 45.0;  // Field-of-view in Y direction angle (in degrees)
 GLfloat  aspect;       // Viewport aspect ratio
 GLfloat  zNear = 0.5, zFar = 13.0;
-
 GLfloat radius;
-
 GLfloat angle = 0.0; // rotation angle in degrees
 vec4 init_eye(7.0, 3.0, -10.0, 1.0); // initial viewer position
 vec4 eye = init_eye;               // current viewer position
-
 int animationFlag = 1; // 1: animation; 0: non-animation. Toggled by key 'a' or 'A'
 int floorFlag = 1;  // 1: solid floor; 0: wireframe floor. Toggled by key 'f' or 'F'
 int fog_flag=1;
@@ -75,14 +69,12 @@ int vertical_flag=1;
 int slant_flag=0;
 int eye_space_flag=0;
 int object_space_flag=1;
-
 int text_sphere_flag=1;
 int	text_sphere_line_flag=1;
 int text_sphere_check_flag=0;
 float t_sub=0.0;
 int enable_lat=1;
-int upright_lat_flag=1;
-
+int upright_lat_flag=0;
 point3 track[] = { point3(3.0, 1.0, 5.0), point3(-2.0, 1.0, -2.5), point3(2.0, 1.0, -4.0) };
 int currentSegment = 0, totalSegments = 3;
 GLfloat theta = 0.0, delta = 0.06;//moving and rotation speed
@@ -137,11 +129,11 @@ point3 f_tex_normals[6]={
 
 vec2 f_tex_coord[6]={
   vec2(0.0, 0.0), 
-  vec2(0.0, 1.0),  
-  vec2(1.0, 1.0),  
+  vec2(0.0, 6/4.0),  
+  vec2(5/4.0, 6/4.0),  
 
-  vec2(1.0, 1.0),  
-  vec2(1.0, 0.0), 
+  vec2(5/4.0, 6/4.0),  
+  vec2(5/4.0, 0.0), 
   vec2(0.0, 0.0),  
 };
 
@@ -297,6 +289,7 @@ void xyz_line()
 	line_colors[7]=vertex_colors[4];line_points[7]=point4(0,0,10,1);
 	line_colors[8]=vertex_colors[4];line_points[8]=point4(0,0,20,1);
 }
+
 int Index=0;
 
 void my_quad( int a, int b, int c, int d )
@@ -345,37 +338,6 @@ point3 crossProduct(point3 u, point3 v){
 	return n;
 }
 
-void my_image_set_up(void)
-{
-	int i, j, c; 
- /* --- Generate checkerboard image to the image array ---*/
-  for (i = 0; i < 64; i++)
-    for (j = 0; j < 64; j++)
-      {
-       c = (((i & 0x8) == 0) ^ ((j & 0x8) == 0));
-
-       if (c == 1) /* white */
-	{
-         c = 255;  
-	     my_Image[i][j][0] = (GLubyte) c;
-         my_Image[i][j][1] = (GLubyte) c;
-         my_Image[i][j][2] = (GLubyte) c;
-	}
-       else  /* green */
-	{
-         my_Image[i][j][0] = (GLubyte) 0;
-         my_Image[i][j][1] = (GLubyte) 150;
-         my_Image[i][j][2] = (GLubyte) 0;
-	}
-
-       my_Image[i][j][3] = (GLubyte) 255;
-      }
-
-  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-};
 void image_set_up(void)
 {
  int i, j, c; 
@@ -549,23 +511,6 @@ void init_tex_ground()
 
    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, ImageWidth, ImageHeight, 
                 0, GL_RGBA, GL_UNSIGNED_BYTE, Image);
-
-   my_image_set_up();
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-   /*--- Create and Initialize a texture object ---*/
-   glGenTextures(1, &my_texName);      // Generate texture obj name(s)
-
-   glActiveTexture( GL_TEXTURE2 );  // Set the active texture unit to be 0 
-   glBindTexture(GL_TEXTURE_2D, my_texName); // Bind the texture to this texture unit
-
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 64, 64, 
-                0, GL_RGBA, GL_UNSIGNED_BYTE, my_Image);
 
     glGenBuffers(1, &f_tex_buffer);
     glBindBuffer(GL_ARRAY_BUFFER, f_tex_buffer);
@@ -972,7 +917,6 @@ void draw_sphere(mat4 mv,mat4 eye_frame)
 	set_flag_sphere_tex();
 	glUniform1i( glGetUniformLocation(program, "texture_1D"), 1 );
 	glUniform1i( glGetUniformLocation(program, "texture_2D"), 0 );
-	glUniform1i( glGetUniformLocation(program, "my_texture_2D"), 2 );
     drawObj(s_flat_buffer,col*3);
 	cancel_flag_sphere();
 	}
@@ -1054,7 +998,7 @@ void display( void )
 		glDepthMask(GL_FALSE);
 		draw_floor(mv,eye_frame);
 		mv=LookAt(eye, at, up)*trans_p_to_q*Translate(centerPos.x, centerPos.y, centerPos.z) *acc_matrix;
-	    draw_shadow(mv);
+	    if(eye[1]>0) draw_shadow(mv);
 
 		glDepthMask(GL_TRUE);
 		glColorMask(GL_FALSE,GL_FALSE,GL_FALSE,GL_FALSE);
@@ -1069,7 +1013,7 @@ void display( void )
 	
 	    glDepthMask(GL_TRUE);
 	    mv=LookAt(eye, at, up)*trans_p_to_q*Translate(centerPos.x, centerPos.y, centerPos.z) *acc_matrix;
-	    draw_shadow(mv);
+		if(eye[1]>0) draw_shadow(mv);
 	
 	    glColorMask(GL_FALSE,GL_FALSE,GL_FALSE,GL_FALSE);
 	    mv = LookAt(eye, at, up);
@@ -1282,6 +1226,7 @@ void shade_menu(int index){
 		smoothshade=!smoothshade;
 		if (smoothshade==1) {flatshade=0;}
 	}
+	solid_Flag=1;
 	display();
 };
 
@@ -1411,7 +1356,6 @@ void addMenu(){
 	glutAddSubMenu("Blending Shadow", blend_shadow_tmp);
 	glutAddSubMenu("Fireworks", firework_tmp);
 	
-
 	glutAttachMenu(GLUT_LEFT_BUTTON);
 }
 //----------------------------------------------------------------------------
