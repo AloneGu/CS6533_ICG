@@ -1,0 +1,5 @@
+Your HW1 score is 92.
+
+Comments:
+a) No Dstart formula; Dnew formulas are not fully derived. -22
+c) Positioned circle in wrong place with wrong size. -6

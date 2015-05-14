@@ -1,0 +1,5 @@
+
+Your HW3 score is 160.
+
+HW3 comments:
+When click flat/smooth shading, should convert the sphere to solid directly, with corresponding lighting effect. -5
