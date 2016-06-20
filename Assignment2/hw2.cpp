@@ -60,21 +60,21 @@ point3 floor_points[floor_NumVertices]; // positions for all vertices
 color3 floor_colors[floor_NumVertices]; // colors for all vertices
 
 point3 vertices[4] = {
-    point3( 5, 0,  8),
-    point3( 5, 0,  -4),
-    point3(  -5,  0,  -4),
+	point3( 5, 0,  8),
+	point3( 5, 0,  -4),
+	point3(  -5,  0,  -4),
 	point3(  -5,  0,  8),
 };
 // RGBA colors
 color3 vertex_colors[8] = {
-    color3( 0.0, 0.0, 0.0),  // black
-    color3( 1.0, 0.0, 0.0),  // red
-    color3( 1.0, 0.84, 0.0),  //golden_yellow
-    color3( 0.0, 1.0, 0.0),  // green
-    color3( 0.0, 0.0, 1.0),  // blue
-    color3( 1.0, 0.0, 1.0),  // magenta
-    color3( 1.0, 1.0, 1.0),  // white
-    color3( 0.0, 1.0, 1.0)   // cyan
+	color3( 0.0, 0.0, 0.0),  // black
+	color3( 1.0, 0.0, 0.0),  // red
+	color3( 1.0, 0.84, 0.0),  //golden_yellow
+	color3( 0.0, 1.0, 0.0),  // green
+	color3( 0.0, 0.0, 1.0),  // blue
+	color3( 1.0, 0.0, 1.0),  // magenta
+	color3( 1.0, 1.0, 1.0),  // white
+	color3( 0.0, 1.0, 1.0)   // cyan
 };
 
 point3 line_points[9];
@@ -88,17 +88,17 @@ int col;//Numbers of triangles
 //----------------------------------------------------------------------------
 void xyz_line()
 {
-	line_colors[0]=vertex_colors[1];line_points[0]=point3(0,0,0);
-	line_colors[1]=vertex_colors[1];line_points[1]=point3(10,0,0);
-	line_colors[2]=vertex_colors[1];line_points[2]=point3(20,0,0);
+	line_colors[0] = vertex_colors[1]; line_points[0] = point3(0, 0, 0);
+	line_colors[1] = vertex_colors[1]; line_points[1] = point3(10, 0, 0);
+	line_colors[2] = vertex_colors[1]; line_points[2] = point3(20, 0, 0);
 
-	line_colors[3]=vertex_colors[5];line_points[3]=point3(0,0,0);
-	line_colors[4]=vertex_colors[5];line_points[4]=point3(0,10,0);
-	line_colors[5]=vertex_colors[5];line_points[5]=point3(0,20,0);
+	line_colors[3] = vertex_colors[5]; line_points[3] = point3(0, 0, 0);
+	line_colors[4] = vertex_colors[5]; line_points[4] = point3(0, 10, 0);
+	line_colors[5] = vertex_colors[5]; line_points[5] = point3(0, 20, 0);
 
-	line_colors[6]=vertex_colors[4];line_points[6]=point3(0,0,0);
-	line_colors[7]=vertex_colors[4];line_points[7]=point3(0,0,10);
-	line_colors[8]=vertex_colors[4];line_points[8]=point3(0,0,20);
+	line_colors[6] = vertex_colors[4]; line_points[6] = point3(0, 0, 0);
+	line_colors[7] = vertex_colors[4]; line_points[7] = point3(0, 0, 10);
+	line_colors[8] = vertex_colors[4]; line_points[8] = point3(0, 0, 20);
 }
 //----------------------------------------------------------------------------
 int Index = 0; // YJC: This must be a global variable since quad() is called
@@ -111,16 +111,16 @@ int Index1 = 0;
 void readFiles()
 {
 	ifstream fp;
-	char* filename=new char[100];
+	char* filename = new char[100];
 
 	int points;
 	float temp[3];
 
 	int count = 0;
-	cout<<"Enter the filename. [sphere.8 or sphere.128],press ENTER use sphere.128" << endl;
+	cout << "Enter the filename. [sphere.8 or sphere.128],press ENTER use sphere.128" << endl;
 
-	cin.getline(filename,100);
-	if(strlen(filename) == 0){
+	cin.getline(filename, 100);
+	if (strlen(filename) == 0) {
 		filename = "sphere.128";
 	}
 	fp.open(filename);
@@ -135,7 +135,7 @@ void readFiles()
 	for (int i = 0; i < col; i++) {
 		fp >> points;
 		for (int j = 0; j < points; j++) {
-			for (int k = 0; k < 3; k++) {	
+			for (int k = 0; k < 3; k++) {
 				fp >> temp[k];
 
 			}
@@ -160,15 +160,15 @@ void colorsphere()
 void floor()
 {
 	floor_colors[0] = vertex_colors[3]; floor_points[0] = vertices[0];
-    floor_colors[1] = vertex_colors[3]; floor_points[1] = vertices[1];
-    floor_colors[2] = vertex_colors[3]; floor_points[2] = vertices[2];
-    floor_colors[3] = vertex_colors[3]; floor_points[3] = vertices[0];
+	floor_colors[1] = vertex_colors[3]; floor_points[1] = vertices[1];
+	floor_colors[2] = vertex_colors[3]; floor_points[2] = vertices[2];
+	floor_colors[3] = vertex_colors[3]; floor_points[3] = vertices[0];
 	floor_colors[4] = vertex_colors[3]; floor_points[4] = vertices[3];
-    floor_colors[5] = vertex_colors[3]; floor_points[5] = vertices[2];
+	floor_colors[5] = vertex_colors[3]; floor_points[5] = vertices[2];
 }
 //---------------------------------------------------------------------------
 //calculate the Direction
-point3 calculateDirection(point3 from, point3 to){
+point3 calculateDirection(point3 from, point3 to) {
 	point3 v;
 	v.x = to.x - from.x;
 	v.y = to.y - from.y;
@@ -182,11 +182,11 @@ point3 calculateDirection(point3 from, point3 to){
 
 	return v;
 }
-point3 crossProduct(point3 u, point3 v){
+point3 crossProduct(point3 u, point3 v) {
 	point3 n;
-	n.x = u.y*v.z - u.z*v.y;
-	n.y = u.z*v.x - u.x*v.z;
-	n.z = u.x*v.y - u.y*v.x;
+	n.x = u.y * v.z - u.z * v.y;
+	n.y = u.z * v.x - u.x * v.z;
+	n.z = u.x * v.y - u.y * v.x;
 	return n;
 }
 //----------------------------------------------------------------------------
@@ -201,7 +201,7 @@ void init()
 	totalSegments = sizeof(track) / sizeof(point3);
 	vectors = new point3[totalSegments];
 	rotationAxis = new point3[totalSegments];
-	for (int i = 0; i<totalSegments - 1; i++){
+	for (int i = 0; i < totalSegments - 1; i++) {
 		vectors[i] = calculateDirection(track[i], track[i + 1]);
 	}
 	//and the last point to the first one
@@ -209,7 +209,7 @@ void init()
 
 	//calculate the rotating axis vectors
 	point3 y_axis(0, 1, 0 );
-	for (int i = 0; i<totalSegments; i++){
+	for (int i = 0; i < totalSegments; i++) {
 		rotationAxis[i] = crossProduct(y_axis, vectors[i]);
 	}
 	// Create and initialize a vertex buffer object for cube, to be used in display()
@@ -217,10 +217,10 @@ void init()
 	glBindBuffer(GL_ARRAY_BUFFER, cube_buffer);
 
 	glBufferData(GL_ARRAY_BUFFER, sizeof(point3) * cube_NumVertices + sizeof(color3) * cube_NumVertices,
-		NULL, GL_STATIC_DRAW);
+	             NULL, GL_STATIC_DRAW);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(point3) * cube_NumVertices, cube_points);
 	glBufferSubData(GL_ARRAY_BUFFER, sizeof(point3) * cube_NumVertices, sizeof(color3) * cube_NumVertices,
-		cube_colors);
+	                cube_colors);
 
 	floor();
 
@@ -229,29 +229,29 @@ void init()
 	glGenBuffers(1, &floor_buffer);
 	glBindBuffer(GL_ARRAY_BUFFER, floor_buffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(floor_points) + sizeof(floor_colors),
-		NULL, GL_STATIC_DRAW);
+	             NULL, GL_STATIC_DRAW);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(floor_points), floor_points);
 	glBufferSubData(GL_ARRAY_BUFFER, sizeof(floor_points), sizeof(floor_colors),
-		floor_colors);
+	                floor_colors);
 
 	xyz_line();
 	glGenBuffers(1, &line_buffer);
-    glBindBuffer(GL_ARRAY_BUFFER, line_buffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(line_points) + sizeof(line_colors),
-		 NULL, GL_STATIC_DRAW);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(line_points), line_points);
-    glBufferSubData(GL_ARRAY_BUFFER, sizeof(line_points), sizeof(line_colors),
-                    line_colors);
+	glBindBuffer(GL_ARRAY_BUFFER, line_buffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(line_points) + sizeof(line_colors),
+	             NULL, GL_STATIC_DRAW);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(line_points), line_points);
+	glBufferSubData(GL_ARRAY_BUFFER, sizeof(line_points), sizeof(line_colors),
+	                line_colors);
 
 
 	// create and initialize a vertex buffer object for sphere.
 	glGenBuffers(1, &sphere_buffer);
 	glBindBuffer(GL_ARRAY_BUFFER, sphere_buffer);
 	glBufferData(GL_ARRAY_BUFFER, 3 * col * sizeof(point3) + 3 * col * sizeof(color3),
-		NULL, GL_STATIC_DRAW);
+	             NULL, GL_STATIC_DRAW);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, 3 * col * sizeof(point3), sphereData);
 	glBufferSubData(GL_ARRAY_BUFFER, 3 * col * sizeof(point3), 3 * col * sizeof(color3),
-		sphere_color);
+	                sphere_color);
 
 	// Load shaders and create a shader program (to be used in display())
 	program = InitShader("vshader42.glsl", "fshader42.glsl");
@@ -274,12 +274,12 @@ void drawObj(GLuint buffer, int num_vertices)
 	GLuint vPosition = glGetAttribLocation(program, "vPosition");
 	glEnableVertexAttribArray(vPosition);
 	glVertexAttribPointer(vPosition, 3, GL_FLOAT, GL_FALSE, 0,
-		BUFFER_OFFSET(0));
+	                      BUFFER_OFFSET(0));
 
 	GLuint vColor = glGetAttribLocation(program, "vColor");
 	glEnableVertexAttribArray(vColor);
 	glVertexAttribPointer(vColor, 3, GL_FLOAT, GL_FALSE, 0,
-		BUFFER_OFFSET(sizeof(point3) * num_vertices));
+	                      BUFFER_OFFSET(sizeof(point3) * num_vertices));
 	// the offset is the (total) size of the previous vertex attribute array(s)
 
 	/* Draw a sequence of geometric objs (triangles) from the vertex buffer
@@ -314,26 +314,26 @@ void display(void)
 	vec4    up(0.0, 1.0, 0.0, 0.0);
 	//  eye = Translate(0.0, 0.0, 0.0)*eye;
 	mat4  mv = LookAt(eye, at, up);
-	
+
 	glUniformMatrix4fv(model_view, 1, GL_TRUE, mv); // GL_TRUE: matrix is row-major
 	if (floorFlag == 1) // Filled floor
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	else              // Wireframe floor
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	drawObj(floor_buffer, floor_NumVertices);  // draw the floor
-	
 
-	glUniformMatrix4fv(model_view, 1, GL_TRUE, mv); // GL_TRUE: matrix is row-major           
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	drawObj(line_buffer,9); //draw xyz line
-	
+
+	glUniformMatrix4fv(model_view, 1, GL_TRUE, mv); // GL_TRUE: matrix is row-major
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	drawObj(line_buffer, 9); //draw xyz line
+
 	//start to draw the sphere
 	//mv = Translate(-6.5, 1.0, -4.0) * LookAt(eye, at, up)*Scale(1.2,1.2,1.2);
-	
+
 	//at = centerPos;
 	//cout << at << endl;
-	acc_matrix =  Rotate(delta, rotationAxis[currentSegment].x, rotationAxis[currentSegment].y, rotationAxis[currentSegment].z)*acc_matrix;
-	mv = LookAt(eye, at, up)*Translate(centerPos.x, centerPos.y, centerPos.z) *acc_matrix;
+	acc_matrix =  Rotate(delta, rotationAxis[currentSegment].x, rotationAxis[currentSegment].y, rotationAxis[currentSegment].z) * acc_matrix;
+	mv = LookAt(eye, at, up) * Translate(centerPos.x, centerPos.y, centerPos.z) * acc_matrix;
 
 	glUniformMatrix4fv(model_view, 1, GL_TRUE, mv);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -343,19 +343,19 @@ void display(void)
 }
 //---------------------------------------------------------------------------
 /* Compute distance between two points */
-float distanceAt(point3 p1, point3 p2){
+float distanceAt(point3 p1, point3 p2) {
 	float dx = p1.x - p2.x;
 	float dy = p1.y - p2.y;
 	float dz = p1.z - p2.z;
 	return sqrt3f(dx, dy, dz);
 }
 
-int nextModel(){
+int nextModel() {
 	int next = currentSegment + 1;
 	return (next == totalSegments) ? 0 : next;
 }
 /* distance between current position and next point is greater than one between current track point and the next point*/
-bool isTrespass(){
+bool isTrespass() {
 	int next = nextModel();
 	point3 from = track[currentSegment];
 	point3 to = track[next];
@@ -374,12 +374,12 @@ void idle(void)
 	theta += delta;
 	if (theta > 360.0)
 		theta -= 360.0;
-	//translate on direction 
-	float offset = (radius*delta*PI) / 180;
-	centerPos.x = centerPos.x + vectors[currentSegment].x*offset;
-	centerPos.y = centerPos.y + vectors[currentSegment].y*offset;
-	centerPos.z = centerPos.z + vectors[currentSegment].z*offset;
-	if (isTrespass()){
+	//translate on direction
+	float offset = (radius * delta * PI) / 180;
+	centerPos.x = centerPos.x + vectors[currentSegment].x * offset;
+	centerPos.y = centerPos.y + vectors[currentSegment].y * offset;
+	centerPos.z = centerPos.z + vectors[currentSegment].z * offset;
+	if (isTrespass()) {
 		currentSegment = nextModel();
 		centerPos = track[currentSegment];
 	}
@@ -396,7 +396,7 @@ void keyboard(unsigned char key, int x, int y)
 	case 'q': case 'Q':
 		exit(EXIT_SUCCESS);
 		break;
-	case 'b':case'B'://start Rolling
+	case 'b': case'B': //start Rolling
 		begin1 = true;
 		glutIdleFunc(idle);
 		break;
@@ -428,24 +428,24 @@ void keyboard(unsigned char key, int x, int y)
 	glutPostRedisplay();
 }
 //----------------------------------------------------------------------------
-void mouse(int button, int state, int x, int y){
-	if (button == GLUT_RIGHT_BUTTON && state == GLUT_UP && begin1){
+void mouse(int button, int state, int x, int y) {
+	if (button == GLUT_RIGHT_BUTTON && state == GLUT_UP && begin1) {
 		rolling = !rolling;
 	}
-	if (rolling){
+	if (rolling) {
 		// Stop rolling
 		glutIdleFunc(idle);
 	}
-	else{
+	else {
 		glutIdleFunc(NULL);
 	}
 }
 //----------------------------------------------------------------------------
-void setDefaultView(){
+void setDefaultView() {
 	// initial viewer position
 	eye = init_eye;
 }
-void quit(){
+void quit() {
 	delete[] vectors;
 	delete[] rotationAxis;
 	//	for (int i = 0; i<128; i++){
@@ -461,12 +461,12 @@ void main_menu(int index)
 {
 	switch (index)
 	{
-	case(0) :
+	case (0) :
 	{
 		setDefaultView();
 		break;
 	}
-	case(1) :
+	case (1) :
 	{
 		quit();
 		break;
@@ -475,7 +475,7 @@ void main_menu(int index)
 	display();
 }
 
-void addMenu(){
+void addMenu() {
 	glutCreateMenu(main_menu);
 	glutAddMenuEntry("Default View Point", 0);
 	glutAddMenuEntry("Quit", 1);

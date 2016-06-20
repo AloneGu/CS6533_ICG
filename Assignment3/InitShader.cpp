@@ -9,21 +9,21 @@ namespace Angel {
 static char*
 readShaderSource(const char* shaderFile)
 {
-    FILE* fp = fopen(shaderFile, "r");
+	FILE* fp = fopen(shaderFile, "r");
 
-    if ( fp == NULL ) { return NULL; }
+	if ( fp == NULL ) { return NULL; }
 
-    fseek(fp, 0L, SEEK_END);
-    long size = ftell(fp);
+	fseek(fp, 0L, SEEK_END);
+	long size = ftell(fp);
 
-    fseek(fp, 0L, SEEK_SET);
-    char* buf = new char[size + 1];
-    fread(buf, 1, size, fp);
+	fseek(fp, 0L, SEEK_SET);
+	char* buf = new char[size + 1];
+	fread(buf, 1, size, fp);
 
-    buf[size] = '\0';
-    fclose(fp);
+	buf[size] = '\0';
+	fclose(fp);
 
-    return buf;
+	return buf;
 }
 
 
@@ -31,77 +31,77 @@ readShaderSource(const char* shaderFile)
 GLuint
 InitShader(const char* vShaderFile, const char* fShaderFile)
 {
-    struct Shader {
-	const char*  filename;
-	GLenum       type;
-	GLchar*      source;
-    }  shaders[2] = {
-	{ vShaderFile, GL_VERTEX_SHADER, NULL },
-	{ fShaderFile, GL_FRAGMENT_SHADER, NULL }
-    };
+	struct Shader {
+		const char*  filename;
+		GLenum       type;
+		GLchar*      source;
+	}  shaders[2] = {
+		{ vShaderFile, GL_VERTEX_SHADER, NULL },
+		{ fShaderFile, GL_FRAGMENT_SHADER, NULL }
+	};
 
-    GLuint program = glCreateProgram();
-    
-    for ( int i = 0; i < 2; ++i ) {
-	Shader& s = shaders[i];
-	s.source = readShaderSource( s.filename );
-	if ( shaders[i].source == NULL ) {
-	    std::cerr << "Failed to read " << s.filename << std::endl;
-	    exit( EXIT_FAILURE );	
-	   }
-        else printf("Successfully read %s\n", s.filename);
+	GLuint program = glCreateProgram();
 
-	GLuint shader = glCreateShader( s.type );
-	glShaderSource( shader, 1, (const GLchar**) &s.source, NULL );
-	glCompileShader( shader );
+	for ( int i = 0; i < 2; ++i ) {
+		Shader& s = shaders[i];
+		s.source = readShaderSource( s.filename );
+		if ( shaders[i].source == NULL ) {
+			std::cerr << "Failed to read " << s.filename << std::endl;
+			exit( EXIT_FAILURE );
+		}
+		else printf("Successfully read %s\n", s.filename);
 
-	GLint  compiled;
-	glGetShaderiv( shader, GL_COMPILE_STATUS, &compiled );
-	if ( !compiled ) {
-	    std::cerr << s.filename << " failed to compile:" << std::endl;
-	    GLint  logSize;
-	    glGetShaderiv( shader, GL_INFO_LOG_LENGTH, &logSize );
-	    char* logMsg = new char[logSize];
-	    glGetShaderInfoLog( shader, logSize, NULL, logMsg );
-	    std::cerr << logMsg << std::endl;
-	    delete [] logMsg;
+		GLuint shader = glCreateShader( s.type );
+		glShaderSource( shader, 1, (const GLchar**) &s.source, NULL );
+		glCompileShader( shader );
 
-	    exit( EXIT_FAILURE );
-	   }
-        else printf("Successfully compiled %s\n", s.filename);
+		GLint  compiled;
+		glGetShaderiv( shader, GL_COMPILE_STATUS, &compiled );
+		if ( !compiled ) {
+			std::cerr << s.filename << " failed to compile:" << std::endl;
+			GLint  logSize;
+			glGetShaderiv( shader, GL_INFO_LOG_LENGTH, &logSize );
+			char* logMsg = new char[logSize];
+			glGetShaderInfoLog( shader, logSize, NULL, logMsg );
+			std::cerr << logMsg << std::endl;
+			delete [] logMsg;
 
-	delete [] s.source;
+			exit( EXIT_FAILURE );
+		}
+		else printf("Successfully compiled %s\n", s.filename);
 
-	glAttachShader( program, shader );
-    }
+		delete [] s.source;
 
-    /* link and error check */
-    glLinkProgram(program);
+		glAttachShader( program, shader );
+	}
 
-    GLint  linked;
-    glGetProgramiv( program, GL_LINK_STATUS, &linked );
-    if ( !linked ) {
-	std::cerr << "Shader program failed to link" << std::endl;
-	GLint  logSize;
-	glGetProgramiv( program, GL_INFO_LOG_LENGTH, &logSize);
-	char* logMsg = new char[logSize];
-	glGetProgramInfoLog( program, logSize, NULL, logMsg );
-	std::cerr << logMsg << std::endl;
-	delete [] logMsg;
+	/* link and error check */
+	glLinkProgram(program);
 
-	exit( EXIT_FAILURE );
-    }
-    else printf("Successfully linked program object\n\n");
+	GLint  linked;
+	glGetProgramiv( program, GL_LINK_STATUS, &linked );
+	if ( !linked ) {
+		std::cerr << "Shader program failed to link" << std::endl;
+		GLint  logSize;
+		glGetProgramiv( program, GL_INFO_LOG_LENGTH, &logSize);
+		char* logMsg = new char[logSize];
+		glGetProgramInfoLog( program, logSize, NULL, logMsg );
+		std::cerr << logMsg << std::endl;
+		delete [] logMsg;
+
+		exit( EXIT_FAILURE );
+	}
+	else printf("Successfully linked program object\n\n");
 
 #if 0 /* YJC: Do NOT use this program obj yet!
               Call glUseProgram() outside, in suitable places inside display(),
               to apply different shading programs on different objects.
       */
-    /* use program object */
-    glUseProgram(program);
+	/* use program object */
+	glUseProgram(program);
 #endif
 
-    return program;
+	return program;
 }
 
 }  // Close namespace Angel block
